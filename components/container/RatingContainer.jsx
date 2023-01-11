@@ -24,7 +24,6 @@ function RatingContainer(props) {
 
   const onStarClickHandler = React.useCallback((ev, index) => {
     const isLeftClick = isLeftSideClicked(ev);
-    console.log(index + (isLeftClick ? 0.5 : 1));
     setRating(index + (isLeftClick ? 0.5 : 1));
   });
 
