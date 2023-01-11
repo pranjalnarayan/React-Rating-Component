@@ -1,6 +1,13 @@
 import * as React from 'react';
 import RatingStar from '../renderer/RatingStar.jsx';
 
+const filledStar =
+  'https://raw.githubusercontent.com/pranjalnarayan/React-Rating-Component/66027cbbc7268f2b4ce2d777e391035a80f03076/assets/svg/star-solid.svg';
+const halfStar =
+  'https://raw.githubusercontent.com/pranjalnarayan/React-Rating-Component/66027cbbc7268f2b4ce2d777e391035a80f03076/assets/svg/star-half-stroke-solid.svg';
+const emptyStar =
+  'https://raw.githubusercontent.com/pranjalnarayan/React-Rating-Component/66027cbbc7268f2b4ce2d777e391035a80f03076/assets/svg/star-regular.svg';
+
 const isLeftSideClicked = (e) => {
   const clickTarget = e.target;
   const clickTargetWidth = clickTarget.offsetWidth;
@@ -11,6 +18,9 @@ const isLeftSideClicked = (e) => {
 
 function RatingContainer(props) {
   const [rating, setRating] = React.useState(0);
+  const totalStars = [];
+  totalStars.length = props.maxRating || 5;
+  totalStars.fill(props.maxRating || 5);
 
   const onStarClickHandler = React.useCallback((ev, index) => {
     const isLeftClick = isLeftSideClicked(ev);
@@ -19,47 +29,25 @@ function RatingContainer(props) {
   });
 
   const getStarSource = (ind) => {
-    console.log(ind);
     if (rating > ind && rating >= ind + 1) {
-      console.log('filledStar');
-      return props.filledStar;
+      return props.filledStar || filledStar;
     }
     if (rating === 0 || (rating && rating <= ind)) {
-      console.log('emptyStar');
-      return props.emptyStar;
+      return props.emptyStar || emptyStar;
     }
-
-    console.log('halfStar');
-    return props.halfStar;
+    return props.halfStar || halfStar;
   };
 
   return (
     <div>
-      <RatingStar
-        source={getStarSource(0)}
-        onClickHandler={onStarClickHandler}
-        index={0}
-      />
-      <RatingStar
-        source={getStarSource(1)}
-        onClickHandler={onStarClickHandler}
-        index={1}
-      />
-      <RatingStar
-        source={getStarSource(2)}
-        onClickHandler={onStarClickHandler}
-        index={2}
-      />
-      <RatingStar
-        source={getStarSource(3)}
-        onClickHandler={onStarClickHandler}
-        index={3}
-      />
-      <RatingStar
-        source={getStarSource(4)}
-        onClickHandler={onStarClickHandler}
-        index={4}
-      />
+      {totalStars.map((el, ind) => (
+        <RatingStar
+          key={ind}
+          source={getStarSource(ind)}
+          onClickHandler={onStarClickHandler}
+          index={ind}
+        />
+      ))}
     </div>
   );
 }
